@@ -1,0 +1,2 @@
+instance_name,scenario_name,status,runtime_sec,vehicles_used,total_distance,total_load
+A-n60-k9,medium,SOLVED,10.0,9,1492,829

@@ -1,0 +1,19 @@
+{
+  "instance_name": "A-n44-k6",
+  "source_file": "A-n44-k6.vrp",
+  "problem_type": "CVRP",
+  "comment": "(Augerat et al, No of trucks: 6, Optimal value: 937)",
+  "dimension": 44,
+  "vehicle_capacity": 100,
+  "depot_id": 1,
+  "num_customers": 43,
+  "total_demand": 570,
+  "time_window_scenarios": [
+    "medium"
+  ],
+  "depot_time_window": [
+    0,
+    480
+  ],
+  "default_service_time": 10
+}

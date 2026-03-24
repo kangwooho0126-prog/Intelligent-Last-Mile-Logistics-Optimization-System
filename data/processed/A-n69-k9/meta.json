@@ -1,0 +1,19 @@
+{
+  "instance_name": "A-n69-k9",
+  "source_file": "A-n69-k9.vrp",
+  "problem_type": "CVRP",
+  "comment": "(Augerat et al, No of trucks: 9, Optimal value: 1159)",
+  "dimension": 69,
+  "vehicle_capacity": 100,
+  "depot_id": 1,
+  "num_customers": 68,
+  "total_demand": 845,
+  "time_window_scenarios": [
+    "medium"
+  ],
+  "depot_time_window": [
+    0,
+    480
+  ],
+  "default_service_time": 10
+}
