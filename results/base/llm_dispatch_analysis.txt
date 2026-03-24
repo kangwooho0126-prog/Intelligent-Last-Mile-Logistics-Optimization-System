@@ -1,0 +1,7 @@
+The OR-Tools solution outperformed the greedy baseline in the last-mile routing experiment.
+
+Compared with the baseline, the optimized solution reduced total travel distance from 1146.3996 to 787.0819, representing a distance reduction of 31.34%. Total delivery cost also decreased from 3839.1988 to 2761.2457, corresponding to a cost reduction of 28.08%.
+
+Both methods used the same number of vehicles (5 vs. 5), while average load utilization remained stable (0.8200 vs. 0.8200). This indicates that the performance gain was achieved mainly through better route structuring and more efficient node sequencing, rather than by increasing logistics resources.
+
+From a business perspective, the result shows that optimization-based routing can significantly improve delivery efficiency and reduce operating cost under the same fleet setting, which is highly relevant for urban last-mile parcel distribution.
