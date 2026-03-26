@@ -1,66 +1,113 @@
-#  Intelligent Last-Mile Logistics Optimization System
+#  Intelligent-Last-Mile-Logistics-Optimization-System
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OR-Tools](https://img.shields.io/badge/Google_OR--Tools-Optimization-orange)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Interactive_UI-red)
 ![LLM](https://img.shields.io/badge/LLM-Agent_Copilot-brightgreen)
 
-An enterprise-grade, algorithm-driven optimization system designed for urban last-mile delivery. This project integrates classic Operations Research (OR) solvers with modern LLM decision-support to solve dynamic logistics challenges.
+An end-to-end intelligent logistics optimization system integrating Capacitated Vehicle Routing Problem (CVRP) modeling, Google OR-Tools optimization, LLM-based business analysis, and interactive agent-based scenario replanning.
 
-##  Core Capabilities (核心亮点)
+---
 
-This is not just a routing script; it's a comprehensive logistics decision system:
-- ⏱ **Advanced Routing (CVRP & VRPTW):** Solves Capacitated Vehicle Routing Problems and supports Time-Window constraints (`ortools_solver_tw.py`).
--  **LLM-Powered Copilot:** Integrates an Agent Dispatcher (`llm_copilot.py`) to automatically analyze routing results and provide natural language business insights.
--  **Dynamic Scenario Simulation:** Built-in scenario managers (`scenario_builder.py`) to stress-test the supply chain under demand surges or vehicle breakdowns.
--  **Interactive Web Dashboard:** A user-friendly frontend built with Streamlit (`streamlit_app.py`) for real-time visualization and parameter tuning.
--  **A/B Algorithm Evaluation:** Benchmarks greedy baseline heuristics against Guided Local Search meta-heuristics.
+##  Project Overview
+
+This project simulates a real-world **last-mile delivery scenario**, where a fleet of vehicles must deliver parcels from a central depot to multiple customers under strict capacity constraints. 
+
+The system provides a complete pipeline for data-driven logistics decision-making:
+- **Optimization-based routing** (OR-Tools)
+- **Baseline heuristic comparison**
+- **KPI-driven performance evaluation**
+- **LLM-powered interpretation** of results
+- **Agent-based interactive replanning** via a Streamlit dashboard
+
+---
 
 ##  Mathematical Formulation
 
-The core routing engine optimizes the standard CVRP/VRPTW objective—minimizing total transportation cost while satisfying rigid physical constraints:
+The core routing engine optimizes the standard CVRP objective—minimizing total transportation cost while satisfying rigid physical constraints:
 
 **Objective Function:**
 $$\text{Minimize} \quad \sum_{k=1}^{K} \sum_{i=0}^{N} \sum_{j=0}^{N} c_{ij} x_{ijk}$$
 
 **Capacity Constraint:**
 $$\sum_{i=1}^{N} d_i y_{ik} \le Q_k \quad \forall k \in K$$
-*(Where $c_{ij}$ is the distance/cost matrix, $d_i$ is the node demand, and $Q_k$ is the maximum load capacity for vehicle $k$.)*
+
+---
+
+##  Methodology
+
+### 1. Problem Modeling
+- Modeled as **CVRP** (Capacitated Vehicle Routing Problem).
+- Single depot + multiple customer nodes.
+- Fixed vehicle capacity constraint.
+
+### 2. Baseline Algorithm
+- Greedy nearest-neighbor heuristic.
+
+### 3. Optimization Solver
+- Google OR-Tools routing solver (Guided Local Search).
+
+### 4. Evaluation Metrics
+- Total distance, Total cost, Vehicles used, Average load utilization, Cost per parcel.
+
+### 5. LLM Copilot
+- Converts optimization results into human-readable business insights.
+
+### 6. Agent Module
+- Supports natural language queries for dynamic replanning (e.g., `"replan with capacity 120"`, `"compare baseline and ortools"`).
+
+---
 
 ##  Quick Start
 
-### 1. Installation
-Clone the repository and install the dependencies.
+### 1. Install Dependencies
+Clone the repository and install the required packages:
 ```bash
 git clone [https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git](https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git)
 cd Intelligent-Last-Mile-Logistics-Optimization-System
 pip install -r requirements.txt
 ```
 
-### 2. Run the CLI Optimization Engine
-To run the core backend solver with standard benchmark data:
-```bash
-python main.py
-```
-
-### 3. Launch the Interactive Dashboard (Recommended)
-To start the Streamlit web application for interactive visualization:
+### 2. Launch the Interactive Dashboard (Recommended)
+Start the Streamlit web application to access the OR-Tools solver and the LLM Agent:
 ```bash
 streamlit run app/streamlit_app.py
 ```
 
-##  Business Impact & Evaluation
-
-On standard CVRP benchmark instances (e.g., Augerat A-n32-k5), the OR-Tools solver demonstrates significant operational savings compared to the heuristic baseline:
-
-| Metric | Baseline (Greedy) | Optimized (OR-Tools) | Improvement |
-| :--- | :--- | :--- | :--- |
-| **Total Distance** | 1,024.5 km | 784.0 km |  **-23.4%** |
-| **Vehicles Used** | 6 Trucks | 5 Trucks |  **-1 Truck** |
-| **Avg. Load Utilization** | 71.2% | 89.5% |  **+18.3%** |
-| **Cost per Parcel** | $1.45 | $1.12 |  **-$0.33** |
-
-*Note: Visual routing comparisons, LLM analysis reports, and scenario simulation heatmaps are automatically saved in the `/results` directory.*
+### 3. Run the CLI Optimization Engine
+Alternatively, run the core backend solver directly:
+```bash
+python main.py
+```
 
 ---
-*Developed for advanced supply chain analytics and algorithm engineering research.*
+
+##  Results & Business Impact
+
+### Baseline vs OR-Tools Evaluation
+
+| Metric | Baseline (Greedy) | OR-Tools (Optimized) | Improvement |
+|--------|-------------------|----------------------|-------------|
+| **Total Distance** | 1146.40 km | 787.08 km |  **↓ 31.34%** |
+| **Total Cost** | $3839.20 | $2761.25 |  **↓ 28.08%** |
+| **Vehicles Used** | 5 Trucks | 5 Trucks |  **=** |
+| **Load Utilization** | 82.0% | 82.0% |  **=** |
+
+###  Key Insight
+> *"Optimization improves delivery efficiency primarily through better route structuring (reducing overlapping paths and deadhead miles), rather than increasing logistics resources."*
+
+---
+
+##  Agent Replanning Example
+
+The integrated LLM Agent allows dispatchers to dynamically interact with the system using natural language.
+
+**User Query:**
+```text
+> "replan with capacity 120"
+```
+
+**System Action & Output:**
+1. **Intent Parsing:** Agent identifies the intent to change `MAX_CAPACITY` constraint to 120.
+2. **Re-Optimization:** Triggers the OR-Tools solver seamlessly with the new parameters.
+3. **LLM Summary:** Generates a comparative business report detailing how the reduced capacity impacts fleet utilization and operational costs, displaying the new metrics directly on the Streamlit dashboard.

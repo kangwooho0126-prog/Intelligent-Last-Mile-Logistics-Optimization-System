@@ -9,7 +9,8 @@ from src.config import (
     COST_COMPARISON_PNG,
     UTILIZATION_COMPARISON_PNG,
     LLM_ANALYSIS_TXT,
-    COMPARISON_SUMMARY_TXT
+    COMPARISON_SUMMARY_TXT,
+    RAW_VRP_FILE
 )
 from src.agent_dispatcher import dispatch_agent
 from src.distance_utils import build_node_dict, build_distance_matrix
@@ -116,7 +117,7 @@ user_query = st.text_input(
 )
 
 if st.button("Run Agent"):
-    parsed_data = parse_cvrp_file("data/raw/A-n32-k5.vrp")
+    parsed_data = parse_cvrp_file(str(RAW_VRP_FILE))
     depot_df, nodes_df = build_logistics_tables(parsed_data)
 
     node_dict = build_node_dict(depot_df, nodes_df)
