@@ -2,68 +2,56 @@
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OR-Tools](https://img.shields.io/badge/Google_OR--Tools-Optimization-orange)
-![Status](https://img.shields.io/badge/Status-Active-success)
+![Streamlit](https://img.shields.io/badge/Streamlit-Interactive_UI-red)
+![LLM](https://img.shields.io/badge/LLM-Agent_Copilot-brightgreen)
 
-A CVRP-based last-mile delivery optimization project featuring cost-aware routing, scenario simulation, and LLM-assisted decision analysis. 
+An enterprise-grade, algorithm-driven optimization system designed for urban last-mile delivery. This project integrates classic Operations Research (OR) solvers with modern LLM decision-support to solve dynamic logistics challenges.
 
-##  Project Overview
+##  Core Capabilities (核心亮点)
 
-This project builds a simplified yet complete pipeline for **last-mile logistics optimization**, aiming to bridge the gap between operations research algorithms and data-driven business decisions. 
-
-**Key Features:**
--  **CVRP Modeling:** Capacitated Vehicle Routing Problem formulation.
--  **A/B Algorithm Comparison:** Baseline Heuristic vs. Global Optimization.
--  **Business Metrics:** Evaluates Cost per Parcel, Load Utilization, and Total Distance.
--  **Scenario Simulation:** Re-planning under dynamic capacity/demand changes.
--  **LLM-Assisted Interpretation (Optional):** Translates optimization outputs into natural language insights for business decision support.
-
-##  Business Scenario
-
-In urban last-mile logistics (e.g., fresh food delivery, parcel stations), efficiency is dictated by strict physical constraints. This system simulates a real-world delivery network:
-- **Depot:** Central Distribution Center (Node 0)
-- **Nodes:** Parcel pickup points / Partner stores
-- **Demand:** Daily parcel volume per node
-- **Vehicles:** Heterogeneous or homogeneous fleet with strict `MAX_CAPACITY` constraints.
+This is not just a routing script; it's a comprehensive logistics decision system:
+- ⏱ **Advanced Routing (CVRP & VRPTW):** Solves Capacitated Vehicle Routing Problems and supports Time-Window constraints (`ortools_solver_tw.py`).
+-  **LLM-Powered Copilot:** Integrates an Agent Dispatcher (`llm_copilot.py`) to automatically analyze routing results and provide natural language business insights.
+-  **Dynamic Scenario Simulation:** Built-in scenario managers (`scenario_builder.py`) to stress-test the supply chain under demand surges or vehicle breakdowns.
+-  **Interactive Web Dashboard:** A user-friendly frontend built with Streamlit (`streamlit_app.py`) for real-time visualization and parameter tuning.
+-  **A/B Algorithm Evaluation:** Benchmarks greedy baseline heuristics against Guided Local Search meta-heuristics.
 
 ##  Mathematical Formulation
 
-We model the scenario as a standard **CVRP**. The core objective is to minimize the total routing cost while strictly adhering to vehicle capacities:
+The core routing engine optimizes the standard CVRP/VRPTW objective—minimizing total transportation cost while satisfying rigid physical constraints:
 
 **Objective Function:**
 $$\text{Minimize} \quad \sum_{k=1}^{K} \sum_{i=0}^{N} \sum_{j=0}^{N} c_{ij} x_{ijk}$$
 
 **Capacity Constraint:**
 $$\sum_{i=1}^{N} d_i y_{ik} \le Q_k \quad \forall k \in K$$
-*(Where $c_{ij}$ is the cost matrix, $d_i$ is node demand, and $Q_k$ is vehicle capacity.)*
-
-##  Methods & Tech Stack
-
-1. **Baseline Heuristic:** A greedy "Nearest-Feasible-Node" strategy used as a performance floor.
-2. **Optimization Solver:** **Google OR-Tools** (Routing Index Manager & Model) utilizing Guided Local Search meta-heuristics for global optimal convergence.
-3. **Data Visualization:** `matplotlib` and `seaborn` for spatial route plotting.
+*(Where $c_{ij}$ is the distance/cost matrix, $d_i$ is the node demand, and $Q_k$ is the maximum load capacity for vehicle $k$.)*
 
 ##  Quick Start
 
-**1. Clone the repository**
+### 1. Installation
+Clone the repository and install the dependencies.
 ```bash
-git clone https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git
+git clone [https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git](https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git)
 cd Intelligent-Last-Mile-Logistics-Optimization-System
+pip install -r requirements.txt
 ```
 
-**2. Install dependencies**
+### 2. Run the CLI Optimization Engine
+To run the core backend solver with standard benchmark data:
 ```bash
-pip install ortools matplotlib numpy
-# Optional for LLM feature: pip install openai
+python main.py
 ```
 
-**3. Run the optimization engine**
+### 3. Launch the Interactive Dashboard (Recommended)
+To start the Streamlit web application for interactive visualization:
 ```bash
-python main.py --dataset A-n32-k5.vrp
+streamlit run app/streamlit_app.py
 ```
 
-##  Results & Evaluation
+##  Business Impact & Evaluation
 
-On a representative CVRP benchmark instance (e.g., Augerat A-n32-k5), the OR-Tools solver demonstrates significant operational savings compared to the greedy baseline:
+On standard CVRP benchmark instances (e.g., Augerat A-n32-k5), the OR-Tools solver demonstrates significant operational savings compared to the heuristic baseline:
 
 | Metric | Baseline (Greedy) | Optimized (OR-Tools) | Improvement |
 | :--- | :--- | :--- | :--- |
@@ -72,7 +60,7 @@ On a representative CVRP benchmark instance (e.g., Augerat A-n32-k5), the OR-Too
 | **Avg. Load Utilization** | 71.2% | 89.5% |  **+18.3%** |
 | **Cost per Parcel** | $1.45 | $1.12 |  **-$0.33** |
 
-*(Visual routing comparisons and scenario simulation heatmaps are saved automatically in the `/results` directory after running the script).*
+*Note: Visual routing comparisons, LLM analysis reports, and scenario simulation heatmaps are automatically saved in the `/results` directory.*
 
 ---
 *Developed for advanced supply chain analytics and algorithm engineering research.*

@@ -19,7 +19,7 @@ from src.scenario_builder import build_logistics_tables
 
 st.set_page_config(page_title="Logistics Optimization System", layout="wide")
 
-st.title("🚚 AI-Powered Last-Mile Logistics Optimization System")
+st.title(" AI-Powered Last-Mile Logistics Optimization System")
 st.caption("Optimization + LLM + Agent-based Decision Support")
 
 baseline_df = pd.read_csv(BASELINE_METRICS_CSV)
@@ -100,7 +100,7 @@ st.header("LLM Dispatch Analysis")
 with open(LLM_ANALYSIS_TXT, "r", encoding="utf-8") as f:
     llm_text = f.read()
 
-st.markdown("### 📌 Business Insight")
+st.markdown("###  Business Insight")
 st.info(llm_text)
 
 st.header("Interactive Agent")
@@ -137,5 +137,5 @@ if st.button("Run Agent"):
         )
 
     st.success("Agent Response")
-    st.markdown("### 📌 Result")
+    st.markdown("###  Result")
     st.write(response)
