@@ -1,0 +1,7 @@
+{
+    "instance_name": "A-n32-k5",
+    "vehicle_capacity": 100,
+    "dimension": 32,
+    "depot_id": 1,
+    "num_service_points": 31
+}

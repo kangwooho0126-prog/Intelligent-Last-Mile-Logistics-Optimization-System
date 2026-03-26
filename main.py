@@ -9,12 +9,18 @@ from src.config import (
     BASELINE_ROUTE_SUMMARY_CSV,
     BASELINE_METRICS_JSON,
     BASELINE_METRICS_CSV,
+    ORTOOLS_ROUTE_PLAN_JSON,
+    ORTOOLS_ROUTE_SUMMARY_CSV,
+    ORTOOLS_METRICS_JSON,
+    ORTOOLS_METRICS_CSV,
+    ORTOOLS_ROUTE_PNG,
     COMPARISON_METRICS_CSV,
     COMPARISON_SUMMARY_TXT,
     DISTANCE_COMPARISON_PNG,
     COST_COMPARISON_PNG,
     UTILIZATION_COMPARISON_PNG,
     LLM_ANALYSIS_TXT,
+    AGENT_RESPONSE_TXT,
     FIXED_VEHICLE_COST,
     COST_PER_DISTANCE_UNIT,
     LLM_MODE,
@@ -23,6 +29,7 @@ from src.config import (
     LLM_MODEL_NAME,
     ensure_directories
 )
+
 from src.data_loader import parse_cvrp_file, save_meta_json
 from src.scenario_builder import build_logistics_tables, save_tables
 from src.visualization import plot_node_map
@@ -53,10 +60,18 @@ from src.llm_copilot import (
 )
 from src.agent_dispatcher import dispatch_agent
 
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def main():
     ensure_directories()
 
+    logging.info("Loading data...")
     parsed_data = parse_cvrp_file(str(RAW_VRP_FILE))
 
     meta_info = {
@@ -82,7 +97,7 @@ def main():
     node_dict = build_node_dict(depot_df, nodes_df)
     distance_matrix = build_distance_matrix(node_dict)
 
-    # Baseline
+    logging.info("Running baseline solver...")
     baseline_routes = solve_baseline_greedy(
         depot_df=depot_df,
         nodes_df=nodes_df,
@@ -112,7 +127,7 @@ def main():
         save_path=str(BASELINE_ROUTE_PNG)
     )
 
-    # OR-Tools
+    logging.info("Running OR-Tools solver...")
     ortools_routes = solve_cvrp_ortools(
         node_dict=node_dict,
         distance_matrix=distance_matrix,
@@ -129,67 +144,69 @@ def main():
         cost_per_distance_unit=COST_PER_DISTANCE_UNIT
     )
 
-    save_route_plan_json(ortools_routes, "results/base/ortools_route_plan.json")
-    save_route_summary_csv(ortools_summary_df, "results/base/ortools_route_summary.csv")
-    save_metrics_json(ortools_metrics, "results/base/ortools_metrics.json")
-    save_metrics_csv(ortools_metrics, "results/base/ortools_metrics.csv")
+    save_route_plan_json(ortools_routes, str(ORTOOLS_ROUTE_PLAN_JSON))
+    save_route_summary_csv(ortools_summary_df, str(ORTOOLS_ROUTE_SUMMARY_CSV))
+    save_metrics_json(ortools_metrics, str(ORTOOLS_METRICS_JSON))
+    save_metrics_csv(ortools_metrics, str(ORTOOLS_METRICS_CSV))
 
     plot_baseline_routes(
         depot_df=depot_df,
         nodes_df=nodes_df,
         routes=ortools_routes,
         node_dict=node_dict,
-        save_path="results/plots/ortools_routes.png"
+        save_path=str(ORTOOLS_ROUTE_PNG)
     )
 
-    # Experiment analysis
+    logging.info("Running experiment analysis...")
     comparison_df = build_comparison_table(
         baseline_metrics_path=str(BASELINE_METRICS_CSV),
-        ortools_metrics_path="results/base/ortools_metrics.csv"
+        ortools_metrics_path=str(ORTOOLS_METRICS_CSV)
     )
 
     save_comparison_table(comparison_df, str(COMPARISON_METRICS_CSV))
 
     plot_metric_comparison(
-        comparison_df=comparison_df,
-        metric_col="total_distance",
-        title="Total Distance Comparison",
-        ylabel="Distance",
-        save_path=str(DISTANCE_COMPARISON_PNG)
+        comparison_df,
+        "total_distance",
+        "Total Distance Comparison",
+        "Distance",
+        str(DISTANCE_COMPARISON_PNG)
     )
 
     plot_metric_comparison(
-        comparison_df=comparison_df,
-        metric_col="total_cost",
-        title="Total Cost Comparison",
-        ylabel="Cost",
-        save_path=str(COST_COMPARISON_PNG)
+        comparison_df,
+        "total_cost",
+        "Total Cost Comparison",
+        "Cost",
+        str(COST_COMPARISON_PNG)
     )
 
     plot_metric_comparison(
-        comparison_df=comparison_df,
-        metric_col="avg_load_utilization",
-        title="Average Load Utilization Comparison",
-        ylabel="Utilization",
-        save_path=str(UTILIZATION_COMPARISON_PNG)
+        comparison_df,
+        "avg_load_utilization",
+        "Load Utilization Comparison",
+        "Utilization",
+        str(UTILIZATION_COMPARISON_PNG)
     )
 
     summary_text = generate_comparison_summary(comparison_df)
     save_summary_text(summary_text, str(COMPARISON_SUMMARY_TXT))
 
-    # LLM copilot
+    logging.info("Generating LLM analysis...")
     llm_analysis = generate_dispatch_analysis(
-        comparison_summary_path=str(COMPARISON_SUMMARY_TXT),
-        mode=LLM_MODE,
-        api_key=LLM_API_KEY,
-        base_url=LLM_BASE_URL,
-        model_name=LLM_MODEL_NAME
+        str(COMPARISON_SUMMARY_TXT),
+        LLM_MODE,
+        LLM_API_KEY,
+        LLM_BASE_URL,
+        LLM_MODEL_NAME
     )
     save_analysis_text(llm_analysis, str(LLM_ANALYSIS_TXT))
 
-    # Agent demo
+    logging.info("Running agent...")
+    user_query = input("Enter your query (e.g., 'replan with capacity 120'): ")
+
     agent_response = dispatch_agent(
-        user_query="replan with capacity 120",
+        user_query=user_query,
         comparison_summary_path=str(COMPARISON_SUMMARY_TXT),
         llm_analysis_path=str(LLM_ANALYSIS_TXT),
         depot_df=depot_df,
@@ -201,8 +218,11 @@ def main():
         depot_id=parsed_data["depot_id"]
     )
 
-    with open("results/base/agent_response.txt", "w", encoding="utf-8") as f:
+    with open(str(AGENT_RESPONSE_TXT), "w", encoding="utf-8") as f:
         f.write(agent_response)
+
+    print("\n=== Agent Response ===\n")
+    print(agent_response)
 
 
 if __name__ == "__main__":

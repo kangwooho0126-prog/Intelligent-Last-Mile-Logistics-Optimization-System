@@ -1,20 +1,20 @@
-Scenario rerun completed with vehicle capacity = 120.
+Scenario rerun completed with vehicle capacity = 150.
 
 Method Comparison Summary
 
-Baseline total distance: 1015.5561
-OR-Tools total distance: 759.0619
-Distance reduction: 25.26%
+Baseline total distance: 936.2746
+OR-Tools total distance: 685.5195
+Distance reduction: 26.78%
 
-Baseline total cost: 3366.6683
-OR-Tools total cost: 2597.1857
-Cost reduction: 22.86%
+Baseline total cost: 3048.8238
+OR-Tools total cost: 2296.5585
+Cost reduction: 24.67%
 
-Baseline vehicles used: 4
-OR-Tools vehicles used: 4
+Baseline vehicles used: 3
+OR-Tools vehicles used: 3
 
-Baseline average load utilization: 0.8542
-OR-Tools average load utilization: 0.8542
+Baseline average load utilization: 0.9111
+OR-Tools average load utilization: 0.9111
 
 Conclusion:
 The OR-Tools solution provides a more efficient routing plan than the greedy baseline,
