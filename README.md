@@ -63,7 +63,7 @@ $$\sum_{i=1}^{N} d_i y_{ik} \le Q_k \quad \forall k \in K$$
 ### 1. Install Dependencies
 Clone the repository and install the required packages:
 ```bash
-git clone [https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git](https://github.com/YourUsername/Intelligent-Last-Mile-Logistics-Optimization-System.git)
+git clone https://github.com/kangwooho0126-prog/Intelligent-Last-Mile-Logistics-Optimization-System.git
 cd Intelligent-Last-Mile-Logistics-Optimization-System
 pip install -r requirements.txt
 ```
